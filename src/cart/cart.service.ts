@@ -1,9 +1,14 @@
+/**
+ * @Author Sajina p k
+ * @description Service for cart
+ */
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateCartDto } from './dto/create-cart.dto';
-import { UpdateCartDto } from './dto/update-cart.dto';
+
 import { CartEntity } from './entities/cart.entity';
 import { CART } from 'src/constatnts';
 import { UserService } from 'src/user/user.service';
+import { UpdateCartDto } from 'src/user/dto/update-user.dto';
 
 @Injectable()
 export class CartService {
@@ -90,7 +95,7 @@ export class CartService {
             statusCode: 200,
             success: true,
             message: 'Added item deleted from cart successfully',
-            
+
           }
         }
 
@@ -111,23 +116,55 @@ export class CartService {
       };
     }
   }
-  create(createCartDto: CreateCartDto) {
-    return 'This action adds a new cart';
+
+
+  /**
+   * Function to update the users cart
+   * @param id 
+   * @param updateCartDto 
+   * @returns 
+   */
+  async updateCart(id, updateCartDto) {
+
+    try {
+      //Calling function to fetch user data against token
+      const user = await this.userService.findOneUser(updateCartDto.token)
+      if (user) {
+
+        const cart = await this.cart.findOne(id)
+
+        if (user.id == cart.user_id) {
+
+          let updateDto = {
+            price: updateCartDto.price,
+            quantity: updateCartDto.quantity
+          }
+
+          await cart.update(updateDto)
+
+          return {
+            statusCode: 200,
+            success: true,
+            message: 'Updated  successfully',
+            data: cart
+
+          }
+        }
+
+      } else {
+        return {
+          statusCode: 400,
+          success: false,
+          message: 'Un authorized'
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: 400,
+        success: false,
+        error,
+      };
+    }
   }
 
-  findAll() {
-    return `This action returns all cart`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} cart`;
-  }
-
-  update(id: number, updateCartDto: UpdateCartDto) {
-    return `This action updates a #${id} cart`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} cart`;
-  }
 }

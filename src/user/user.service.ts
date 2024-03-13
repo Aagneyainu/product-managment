@@ -1,8 +1,14 @@
+/**
+ * @Author Sajina p k
+ * @description Service for user table
+ */
+
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+
 import { USER } from 'src/constatnts';
 import { UserEntity } from './entities/user.entity';
+import { CartService } from 'src/cart/cart.service';
 
 @Injectable()
 export class UserService {
@@ -10,6 +16,8 @@ export class UserService {
   constructor(
     @Inject(USER)
     private readonly user: typeof UserEntity,
+
+
 
   ) { }
 
@@ -133,15 +141,8 @@ export class UserService {
     return user
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+
+
 }
