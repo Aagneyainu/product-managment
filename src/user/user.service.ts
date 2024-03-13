@@ -80,6 +80,8 @@ export class UserService {
       if (user) {
 
         /**If user exist then generate a random token and update user table */
+
+        //Here,token is implemented using a random generation logic for every login and will be updated the token in table after the user have logged every time,here passport ,authguard other libraries are not used beacuse of the limited time iam provided with.
         const token = Math.floor(Math.random() * 9000000000000);
 
 
